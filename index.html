@@ -2,216 +2,210 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Thuế Chính Phủ – eTax Mobile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thuế Chính Phủ - eTax Mobile</title>
 
 <style>
-*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+*{box-sizing:border-box;font-family:Arial}
 body{margin:0;background:#eef2f5}
+
+/* LOGIN */
+#login{
+  min-height:100vh;
+  background:#111;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+}
+#login h2{margin-bottom:10px}
+#login input{
+  width:85%;
+  max-width:320px;
+  padding:14px;
+  border-radius:10px;
+  border:none;
+}
+#login button{
+  width:85%;
+  max-width:320px;
+  padding:14px;
+  border-radius:25px;
+  border:none;
+  background:#b00000;
+  color:#fff;
+  font-weight:bold;
+  font-size:16px;
+}
 
 /* HEADER */
 .header{
-  background:#9b0000;color:#fff;
-  padding:12px;text-align:center;font-weight:bold
+  background:#9b0000;
+  color:#fff;
+  padding:12px;
+  text-align:center;
+  font-weight:bold;
 }
 
-/* CARD */
+/* HOME */
+#home{display:none}
 .card{
-  background:#fff;margin:15px;
-  padding:15px;border-radius:12px
+  background:#fff;
+  margin:15px;
+  padding:15px;
+  border-radius:12px;
 }
-
-/* USER INFO */
-.user{
-  display:flex;align-items:center;gap:12px
-}
-.avatar{
-  width:48px;height:48px;border-radius:50%;
-  background:#ccc
-}
-.name{font-weight:bold;color:#9b0000}
-
-/* GRID ICON */
 .grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:12px
+  gap:10px;
 }
-.icon{
-  background:#b00000;color:#fff;
-  border-radius:14px;
-  padding:16px 8px;
+.item{
+  background:#b00000;
+  color:#fff;
+  padding:12px;
+  border-radius:12px;
   text-align:center;
   font-size:13px;
-  cursor:pointer
 }
 
 /* FORM */
-#formKhai{display:none}
-#formKhai input{
-  width:100%;padding:12px;margin:8px 0;
-  border-radius:8px;border:1px solid #ccc
+input.form{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
 }
-#formKhai button{
-  width:100%;padding:14px;
-  border:none;border-radius:25px;
-  background:#b00000;color:#fff;
-  font-size:16px;font-weight:bold
+button.formbtn{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:25px;
+  background:#b00000;
+  color:#fff;
+  font-weight:bold;
 }
 
 /* LOADING */
 #loading{
-  display:none;min-height:100vh;
-  background:#9b0000;color:#fff;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  position:relative
-}
-#back{
-  position:absolute;top:12px;
-  color:#fff;font-weight:bold;
-  cursor:pointer
+  display:none;
+  min-height:100vh;
+  background:#9b0000;
+  color:#fff;
+  text-align:center;
+  padding-top:80px;
 }
 .progress{
-  width:70%;
-  background:rgba(255,255,255,.35);
-  border-radius:20px;overflow:hidden
+  width:80%;
+  height:20px;
+  background:#fff;
+  margin:20px auto;
+  border-radius:10px;
+  overflow:hidden;
 }
-.bar{height:14px;width:0%;background:#fff}
-#percent{margin:8px 0;font-size:18px;font-weight:bold}
-
-/* MODAL */
-#modal{
-  display:none;position:fixed;
-  inset:0;background:rgba(0,0,0,.5);
-  align-items:center;justify-content:center
-}
-#modalBox{
-  background:#fff;padding:20px;
-  border-radius:12px;
-  width:80%;max-width:300px;
-  text-align:center
-}
-#modalBox button{
-  margin-top:14px;padding:10px 18px;
-  border:none;border-radius:20px;
-  background:#b00000;color:#fff
+.bar{
+  height:100%;
+  width:0%;
+  background:#ffcc00;
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">eTax Mobile</div>
-
-<!-- USER INFO -->
-<div class="card user">
-  <div class="avatar"></div>
-  <div>
-    <div>MST: <b id="mstText"></b></div>
-    <div class="name" id="nameText"></div>
-  </div>
+<!-- LOGIN -->
+<div id="login">
+  <h2>eTax Mobile</h2>
+  <input id="name" placeholder="Họ và tên">
+  <input id="mst" placeholder="Mã số thuế">
+  <input type="password" placeholder="Mật khẩu">
+  <button onclick="login()">Đăng nhập</button>
 </div>
 
-<!-- CHỨC NĂNG HAY DÙNG -->
-<div class="card">
-  <h3>Chức năng hay dùng</h3>
-  <div class="grid">
-    <!-- ✅ CHỈ ĐỔI MỤC NÀY -->
-    <div class="icon" onclick="openForm()">Kê khai</div>
+<!-- HOME -->
+<div id="home">
+  <div class="header">eTax Mobile</div>
 
-    <!-- ⛔ GIỮ NGUYÊN CÁC MỤC CÒN LẠI -->
-    <div class="icon">Tra cứu thông tin quyết toán</div>
-    <div class="icon">Nộp thuế</div>
-    <div class="icon">Liên kết / Hủy liên kết</div>
+  <div class="card">
+    <b>MST:</b> <span id="showMST"></span><br>
+    <b>Họ tên:</b> <span id="showName"></span>
   </div>
-</div>
 
-<!-- DANH SÁCH NHÓM DỊCH VỤ (GIỮ NGUYÊN) -->
-<div class="card">
-  <h3>Danh sách nhóm dịch vụ</h3>
-  <div class="grid">
-    <div class="icon">Hóa đơn điện tử</div>
-    <div class="icon">Biên lai điện tử</div>
-    <div class="icon">Khai thuế</div>
-    <div class="icon">Đăng ký thuế</div>
-    <div class="icon">Hỗ trợ quyết toán TNCN</div>
-    <div class="icon">Nhóm chức năng nộp thuế</div>
+  <div class="card">
+    <b>Chức năng hay dùng</b>
+    <div class="grid">
+      <div class="item" onclick="openForm()">Kê khai</div>
+      <div class="item">Tra cứu quyết toán</div>
+      <div class="item">Nộp thuế</div>
+      <div class="item">Liên kết</div>
+    </div>
   </div>
-</div>
 
-<!-- FORM KÊ KHAI -->
-<div id="formKhai" class="card">
-  <h3>Kê khai doanh nghiệp</h3>
-  <input placeholder="Mã số thuế">
-  <input id="phone" placeholder="Số điện thoại">
-  <input placeholder="Người đại diện pháp luật">
-  <input placeholder="Địa chỉ công ty">
-  <input placeholder="Vốn điều lệ">
-  <input placeholder="Ngân hàng">
-  <input placeholder="Số tài khoản">
-  <button onclick="submitForm()">Cập nhật hồ sơ</button>
+  <div class="card" id="form" style="display:none">
+    <input class="form" placeholder="Mã số thuế DN">
+    <input class="form" placeholder="Số điện thoại">
+    <input class="form" placeholder="Người đại diện pháp luật">
+    <input class="form" placeholder="Địa chỉ công ty">
+    <input class="form" placeholder="Vốn điều lệ">
+    <input class="form" placeholder="Ngân hàng">
+    <input class="form" placeholder="Số tài khoản">
+    <button class="formbtn" onclick="startLoading()">Cập nhật hồ sơ</button>
+  </div>
 </div>
 
 <!-- LOADING -->
 <div id="loading">
-  <div id="back" onclick="backHome()">THUẾ CHÍNH PHỦ</div>
-  <h3>Hồ sơ đang được cập nhật</h3>
-  <div>Nhân viên đang thao tác, vui lòng không chạm vào điện thoại</div>
-  <div id="percent">0%</div>
-  <div class="progress"><div class="bar" id="bar"></div></div>
-</div>
-
-<!-- MODAL -->
-<div id="modal">
-  <div id="modalBox">
-    <div>Số tài khoản mới, vui lòng xác thực</div>
-    <button onclick="closeModal()">Đóng</button>
+  <h2 onclick="backHome()" style="cursor:pointer">Thuế Chính Phủ</h2>
+  <p>Hồ sơ đang được cập nhật</p>
+  <p>Nhân viên đang thao tác, không vui lòng chạm vào điện thoại</p>
+  <div class="progress">
+    <div class="bar" id="bar"></div>
   </div>
+  <p id="percent">0%</p>
 </div>
 
 <script>
-/* giả lập thông tin đăng nhập */
-document.getElementById('mstText').innerText='036204004988';
-document.getElementById('nameText').innerText='NGUYỄN NGỌC ĐỊNH';
-
-let returned=false;
-let phoneTouched=false;
-
-function openForm(){
-  document.getElementById('formKhai').style.display='block';
-  phoneTouched=false;
+function login(){
+  const name=document.getElementById('name').value;
+  const mst=document.getElementById('mst').value;
+  if(!name||!mst){alert('Nhập đầy đủ thông tin');return;}
+  document.getElementById('login').style.display='none';
+  document.getElementById('home').style.display='block';
+  document.getElementById('showName').innerText=name;
+  document.getElementById('showMST').innerText=mst;
 }
 
-document.getElementById('phone').addEventListener('focus',()=>{
-  if(returned) phoneTouched=true;
-});
+function openForm(){
+  document.getElementById('form').style.display='block';
+}
 
-function submitForm(){
-  if(returned && phoneTouched){
-    document.getElementById('modal').style.display='flex';
-    return;
-  }
-  document.getElementById('loading').style.display='flex';
+function startLoading(){
+  document.getElementById('home').style.display='none';
+  document.getElementById('loading').style.display='block';
+
   let p=0;
+  const total=360; // 6 phút
   const bar=document.getElementById('bar');
-  const percent=document.getElementById('percent');
-  bar.style.width='0%';percent.innerText='0%';
-  const t=setInterval(()=>{
-    p++;bar.style.width=p+'%';percent.innerText=p+'%';
-    if(p>=100) clearInterval(t);
-  },3600); // ~6 phút
+  const text=document.getElementById('percent');
+
+  const timer=setInterval(()=>{
+    p++;
+    let percent=Math.floor((p/total)*100);
+    bar.style.width=percent+'%';
+    text.innerText=percent+'%';
+    if(p>=total){
+      clearInterval(timer);
+      text.innerText='Hoàn tất';
+    }
+  },1000);
 }
 
 function backHome(){
-  returned=true;
   document.getElementById('loading').style.display='none';
-}
-
-function closeModal(){
-  document.getElementById('modal').style.display='none';
-  phoneTouched=false;
+  document.getElementById('home').style.display='block';
 }
 </script>
 
