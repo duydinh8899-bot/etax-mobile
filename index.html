@@ -7,107 +7,151 @@
 
 <style>
 *{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-body{margin:0;background:#f2f2f2}
+body{margin:0;background:#eef2f5}
 
-/* LOGIN */
-#login{
-  min-height:100vh;background:#111;color:#fff;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:20px
-}
-.logo{
-  width:110px;height:110px;border-radius:50%;
-  background:#b00000;color:#ffd700;
-  display:flex;align-items:center;justify-content:center;
-  font-weight:bold;text-align:center;margin-bottom:10px
-}
-#login h1{margin:8px 0 18px}
-#login input{
-  width:100%;max-width:340px;padding:14px;margin:8px 0;
-  border-radius:12px;border:none;font-size:16px
-}
-#login button{
-  width:100%;max-width:340px;padding:14px;margin-top:16px;
-  border:none;border-radius:28px;background:#b00000;color:#fff;
-  font-size:18px;font-weight:bold
+/* HEADER */
+.header{
+  background:#9b0000;color:#fff;
+  padding:12px;text-align:center;font-weight:bold
 }
 
-/* HOME */
-#home{display:none;min-height:100vh}
-.header{background:#9b0000;color:#fff;text-align:center;padding:12px;font-weight:bold}
-.card{background:#fff;margin:15px;padding:15px;border-radius:12px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.icon{background:#b00000;color:#fff;border-radius:12px;padding:18px 6px;text-align:center;font-size:13px;cursor:pointer}
+/* CARD */
+.card{
+  background:#fff;margin:15px;
+  padding:15px;border-radius:12px
+}
+
+/* USER INFO */
+.user{
+  display:flex;align-items:center;gap:12px
+}
+.avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:#ccc
+}
+.name{font-weight:bold;color:#9b0000}
+
+/* GRID ICON */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px
+}
+.icon{
+  background:#b00000;color:#fff;
+  border-radius:14px;
+  padding:16px 8px;
+  text-align:center;
+  font-size:13px;
+  cursor:pointer
+}
 
 /* FORM */
-#form{display:none}
-#form input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc}
-#form button{width:100%;padding:14px;border:none;border-radius:25px;background:#b00000;color:#fff;font-size:16px;font-weight:bold}
+#formKhai{display:none}
+#formKhai input{
+  width:100%;padding:12px;margin:8px 0;
+  border-radius:8px;border:1px solid #ccc
+}
+#formKhai button{
+  width:100%;padding:14px;
+  border:none;border-radius:25px;
+  background:#b00000;color:#fff;
+  font-size:16px;font-weight:bold
+}
 
 /* LOADING */
 #loading{
-  display:none;min-height:100vh;background:#9b0000;color:#fff;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  display:none;min-height:100vh;
+  background:#9b0000;color:#fff;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
   position:relative
 }
-#back{position:absolute;top:12px;color:#fff;font-weight:bold;cursor:pointer}
-.progress{width:70%;background:rgba(255,255,255,.35);border-radius:20px;overflow:hidden}
+#back{
+  position:absolute;top:12px;
+  color:#fff;font-weight:bold;
+  cursor:pointer
+}
+.progress{
+  width:70%;
+  background:rgba(255,255,255,.35);
+  border-radius:20px;overflow:hidden
+}
 .bar{height:14px;width:0%;background:#fff}
 #percent{margin:8px 0;font-size:18px;font-weight:bold}
 
 /* MODAL */
 #modal{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  display:none;position:fixed;
+  inset:0;background:rgba(0,0,0,.5);
   align-items:center;justify-content:center
 }
 #modalBox{
-  background:#fff;padding:20px;border-radius:12px;
-  width:80%;max-width:300px;text-align:center
+  background:#fff;padding:20px;
+  border-radius:12px;
+  width:80%;max-width:300px;
+  text-align:center
 }
 #modalBox button{
-  margin-top:14px;padding:10px 18px;border:none;
-  border-radius:20px;background:#b00000;color:#fff
+  margin-top:14px;padding:10px 18px;
+  border:none;border-radius:20px;
+  background:#b00000;color:#fff
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-  <div class="logo">THUẾ<br>NHÀ NƯỚC</div>
-  <h1>eTax Mobile</h1>
-  <input id="name" placeholder="Họ và tên">
-  <input id="mst" placeholder="Mã số thuế">
-  <input type="password" placeholder="Mật khẩu">
-  <button onclick="login()">Đăng nhập</button>
+<!-- HEADER -->
+<div class="header">eTax Mobile</div>
+
+<!-- USER INFO -->
+<div class="card user">
+  <div class="avatar"></div>
+  <div>
+    <div>MST: <b id="mstText"></b></div>
+    <div class="name" id="nameText"></div>
+  </div>
 </div>
 
-<!-- HOME -->
-<div id="home">
-  <div class="header">eTax Mobile</div>
-  <div class="card"><b id="info"></b></div>
+<!-- CHỨC NĂNG HAY DÙNG -->
+<div class="card">
+  <h3>Chức năng hay dùng</h3>
+  <div class="grid">
+    <!-- ✅ CHỈ ĐỔI MỤC NÀY -->
+    <div class="icon" onclick="openForm()">Kê khai</div>
 
-  <div class="card">
-    <div class="grid">
-      <div class="icon" onclick="openForm()">Kê khai</div>
-      <div class="icon">Tra cứu quyết toán</div>
-      <div class="icon">Nộp thuế</div>
-      <div class="icon">Liên kết</div>
-    </div>
+    <!-- ⛔ GIỮ NGUYÊN CÁC MỤC CÒN LẠI -->
+    <div class="icon">Tra cứu thông tin quyết toán</div>
+    <div class="icon">Nộp thuế</div>
+    <div class="icon">Liên kết / Hủy liên kết</div>
   </div>
+</div>
 
-  <div id="form" class="card">
-    <h3>Kê khai doanh nghiệp</h3>
-    <input placeholder="Mã số thuế">
-    <input id="phone" placeholder="Số điện thoại">
-    <input placeholder="Người đại diện pháp luật">
-    <input placeholder="Địa chỉ công ty">
-    <input placeholder="Vốn điều lệ">
-    <input placeholder="Ngân hàng">
-    <input placeholder="Số tài khoản">
-    <button onclick="submitForm()">Cập nhật hồ sơ</button>
+<!-- DANH SÁCH NHÓM DỊCH VỤ (GIỮ NGUYÊN) -->
+<div class="card">
+  <h3>Danh sách nhóm dịch vụ</h3>
+  <div class="grid">
+    <div class="icon">Hóa đơn điện tử</div>
+    <div class="icon">Biên lai điện tử</div>
+    <div class="icon">Khai thuế</div>
+    <div class="icon">Đăng ký thuế</div>
+    <div class="icon">Hỗ trợ quyết toán TNCN</div>
+    <div class="icon">Nhóm chức năng nộp thuế</div>
   </div>
+</div>
+
+<!-- FORM KÊ KHAI -->
+<div id="formKhai" class="card">
+  <h3>Kê khai doanh nghiệp</h3>
+  <input placeholder="Mã số thuế">
+  <input id="phone" placeholder="Số điện thoại">
+  <input placeholder="Người đại diện pháp luật">
+  <input placeholder="Địa chỉ công ty">
+  <input placeholder="Vốn điều lệ">
+  <input placeholder="Ngân hàng">
+  <input placeholder="Số tài khoản">
+  <button onclick="submitForm()">Cập nhật hồ sơ</button>
 </div>
 
 <!-- LOADING -->
@@ -128,56 +172,46 @@ body{margin:0;background:#f2f2f2}
 </div>
 
 <script>
-let isLoggedIn=false;
-let hasReturnedFromLoading=false;
-let phoneTouchedOnce=false;
+/* giả lập thông tin đăng nhập */
+document.getElementById('mstText').innerText='036204004988';
+document.getElementById('nameText').innerText='NGUYỄN NGỌC ĐỊNH';
 
-function login(){
-  const n=name.value.trim(), m=mst.value.trim();
-  if(!n||!m){alert('Vui lòng nhập Họ tên và Mã số thuế');return;}
-  isLoggedIn=true;
-  login.style.display='none';
-  home.style.display='block';
-  info.innerText='MST: '+m+' | '+n;
-}
+let returned=false;
+let phoneTouched=false;
 
 function openForm(){
-  if(!isLoggedIn) return;
-  form.style.display='block';
-  phoneTouchedOnce=false;
+  document.getElementById('formKhai').style.display='block';
+  phoneTouched=false;
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-  phone.addEventListener('focus',()=>{
-    if(hasReturnedFromLoading) phoneTouchedOnce=true;
-  });
+document.getElementById('phone').addEventListener('focus',()=>{
+  if(returned) phoneTouched=true;
 });
 
 function submitForm(){
-  if(hasReturnedFromLoading && phoneTouchedOnce){
-    modal.style.display='flex';
+  if(returned && phoneTouched){
+    document.getElementById('modal').style.display='flex';
     return;
   }
-  home.style.display='none';
-  loading.style.display='flex';
+  document.getElementById('loading').style.display='flex';
   let p=0;
-  bar.style.width='0%'; percent.innerText='0%';
+  const bar=document.getElementById('bar');
+  const percent=document.getElementById('percent');
+  bar.style.width='0%';percent.innerText='0%';
   const t=setInterval(()=>{
-    p++; bar.style.width=p+'%'; percent.innerText=p+'%';
+    p++;bar.style.width=p+'%';percent.innerText=p+'%';
     if(p>=100) clearInterval(t);
   },3600); // ~6 phút
 }
 
 function backHome(){
-  hasReturnedFromLoading=true;
-  loading.style.display='none';
-  home.style.display='block';
-  form.style.display='block';
+  returned=true;
+  document.getElementById('loading').style.display='none';
 }
 
 function closeModal(){
-  modal.style.display='none';
-  phoneTouchedOnce=false;
+  document.getElementById('modal').style.display='none';
+  phoneTouched=false;
 }
 </script>
 
