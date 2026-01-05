@@ -3,114 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thuế Chính Phủ - eTax Mobile</title>
+<title>Thuế Chính Phủ - eTax Mobile (Demo)</title>
 
 <style>
 *{box-sizing:border-box;font-family:Arial}
 body{margin:0;background:#eef2f5}
 
-/* LOGIN */
+/* ===== LOGIN ===== */
 #login{
-  min-height:100vh;
-  background:#111;
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
+  min-height:100vh;background:#111;color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px
 }
 #login h2{margin-bottom:10px}
 #login input{
-  width:85%;
-  max-width:320px;
-  padding:14px;
-  border-radius:10px;
-  border:none;
+  width:85%;max-width:320px;padding:14px;border-radius:10px;border:none
 }
 #login button{
-  width:85%;
-  max-width:320px;
-  padding:14px;
-  border-radius:25px;
-  border:none;
-  background:#b00000;
-  color:#fff;
-  font-weight:bold;
-  font-size:16px;
+  width:85%;max-width:320px;padding:14px;border-radius:25px;border:none;
+  background:#b00000;color:#fff;font-weight:bold;font-size:16px
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 .header{
-  background:#9b0000;
-  color:#fff;
-  padding:12px;
-  text-align:center;
-  font-weight:bold;
+  background:#9b0000;color:#fff;padding:12px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-weight:bold;position:sticky;top:0;z-index:10
+}
+.header .title{cursor:pointer}
+
+/* ===== LOGO STAR (DEMO) ===== */
+.logo-star{
+  width:36px;height:36px;border-radius:50%;
+  background:#ffd700;color:#9b0000;font-weight:bold;
+  display:flex;align-items:center;justify-content:center
 }
 
-/* HOME */
+/* ===== HOME ===== */
 #home{display:none}
-.card{
-  background:#fff;
-  margin:15px;
-  padding:15px;
-  border-radius:12px;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
+.card{background:#fff;margin:15px;padding:15px;border-radius:12px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .item{
-  background:#b00000;
-  color:#fff;
-  padding:12px;
-  border-radius:12px;
-  text-align:center;
-  font-size:13px;
+  background:#b00000;color:#fff;padding:12px;border-radius:12px;
+  text-align:center;font-size:13px;cursor:pointer
 }
 
-/* FORM */
+/* ===== FORM ===== */
+#form{display:none}
 input.form{
-  width:100%;
-  padding:12px;
-  margin-bottom:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
+  width:100%;padding:12px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc
 }
 button.formbtn{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:25px;
-  background:#b00000;
-  color:#fff;
-  font-weight:bold;
+  width:100%;padding:14px;border:none;border-radius:25px;
+  background:#b00000;color:#fff;font-weight:bold
 }
 
-/* LOADING */
+/* ===== MODAL ERROR ===== */
+#modal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  align-items:center;justify-content:center;z-index:20
+}
+.modal-box{
+  background:#fff;padding:20px;border-radius:12px;width:85%;max-width:360px;text-align:center
+}
+.modal-box button{
+  margin-top:12px;padding:10px 18px;border:none;border-radius:20px;
+  background:#b00000;color:#fff;font-weight:bold
+}
+
+/* ===== LOADING ===== */
 #loading{
-  display:none;
-  min-height:100vh;
-  background:#9b0000;
-  color:#fff;
-  text-align:center;
-  padding-top:80px;
+  display:none;min-height:100vh;background:#9b0000;color:#fff;text-align:center;padding-top:80px
 }
 .progress{
-  width:80%;
-  height:20px;
-  background:#fff;
-  margin:20px auto;
-  border-radius:10px;
-  overflow:hidden;
+  width:80%;height:20px;background:#fff;margin:20px auto;border-radius:10px;overflow:hidden
 }
-.bar{
-  height:100%;
-  width:0%;
-  background:#ffcc00;
-}
+.bar{height:100%;width:0%;background:#ffcc00}
 </style>
 </head>
 
@@ -127,7 +94,10 @@ button.formbtn{
 
 <!-- HOME -->
 <div id="home">
-  <div class="header">eTax Mobile</div>
+  <div class="header">
+    <div class="logo-star">★</div>
+    <div class="title" onclick="goHome()">Thuế Chính Phủ</div>
+  </div>
 
   <div class="card">
     <b>MST:</b> <span id="showMST"></span><br>
@@ -137,37 +107,48 @@ button.formbtn{
   <div class="card">
     <b>Chức năng hay dùng</b>
     <div class="grid">
+      <!-- CHỈ ĐỔI MỤC NÀY -->
       <div class="item" onclick="openForm()">Kê khai</div>
+
+      <!-- GIỮ NGUYÊN CÁC MỤC KHÁC -->
       <div class="item">Tra cứu quyết toán</div>
       <div class="item">Nộp thuế</div>
       <div class="item">Liên kết</div>
     </div>
   </div>
 
-  <div class="card" id="form" style="display:none">
+  <div class="card" id="form">
     <input class="form" placeholder="Mã số thuế DN">
-    <input class="form" placeholder="Số điện thoại">
+    <input class="form" id="phone" placeholder="Số điện thoại">
     <input class="form" placeholder="Người đại diện pháp luật">
     <input class="form" placeholder="Địa chỉ công ty">
     <input class="form" placeholder="Vốn điều lệ">
     <input class="form" placeholder="Ngân hàng">
     <input class="form" placeholder="Số tài khoản">
-    <button class="formbtn" onclick="startLoading()">Cập nhật hồ sơ</button>
+    <button class="formbtn" onclick="submitForm()">Cập nhật hồ sơ</button>
+  </div>
+</div>
+
+<!-- MODAL ERROR -->
+<div id="modal">
+  <div class="modal-box">
+    <p><b>Số tài khoản ngân hàng chưa xác thực</b></p>
+    <button onclick="closeModal()">Đóng</button>
   </div>
 </div>
 
 <!-- LOADING -->
 <div id="loading">
-  <h2 onclick="backHome()" style="cursor:pointer">Thuế Chính Phủ</h2>
+  <h2 onclick="goHome()" style="cursor:pointer">Thuế Chính Phủ</h2>
   <p>Hồ sơ đang được cập nhật</p>
   <p>Nhân viên đang thao tác, không vui lòng chạm vào điện thoại</p>
-  <div class="progress">
-    <div class="bar" id="bar"></div>
-  </div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
   <p id="percent">0%</p>
 </div>
 
 <script>
+let phoneErrorShown = false; // chỉ báo lỗi 1 lần
+
 function login(){
   const name=document.getElementById('name').value;
   const mst=document.getElementById('mst').value;
@@ -182,12 +163,25 @@ function openForm(){
   document.getElementById('form').style.display='block';
 }
 
+function submitForm(){
+  const phone=document.getElementById('phone').value;
+  if(phone && !phoneErrorShown){
+    phoneErrorShown = true;
+    document.getElementById('modal').style.display='flex';
+    return;
+  }
+  startLoading();
+}
+
+function closeModal(){
+  document.getElementById('modal').style.display='none';
+}
+
 function startLoading(){
   document.getElementById('home').style.display='none';
   document.getElementById('loading').style.display='block';
 
-  let p=0;
-  const total=360; // 6 phút
+  let p=0, total=360; // 6 phút
   const bar=document.getElementById('bar');
   const text=document.getElementById('percent');
 
@@ -196,14 +190,11 @@ function startLoading(){
     let percent=Math.floor((p/total)*100);
     bar.style.width=percent+'%';
     text.innerText=percent+'%';
-    if(p>=total){
-      clearInterval(timer);
-      text.innerText='Hoàn tất';
-    }
+    if(p>=total){ clearInterval(timer); text.innerText='Hoàn tất'; }
   },1000);
 }
 
-function backHome(){
+function goHome(){
   document.getElementById('loading').style.display='none';
   document.getElementById('home').style.display='block';
 }
