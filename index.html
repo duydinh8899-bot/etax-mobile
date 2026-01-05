@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>eTax Mobile Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f2f2f2}
+.hidden{display:none}
+.header{
+  background:#9b0000;color:#fff;
+  padding:12px;text-align:center;
+  font-weight:bold
+}
+button{
+  background:#b00000;color:#fff;
+  border:none;width:100%;
+  padding:14px;border-radius:25px;
+  font-size:16px;font-weight:bold
+}
+.card{
+  background:#fff;margin:15px;
+  padding:15px;border-radius:12px
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px
+}
+.icon{
+  background:#b00000;color:#fff;
+  border-radius:12px;
+  padding:18px 5px;
+  text-align:center;
+  font-size:13px;
+  cursor:pointer
+}
+input{
+  width:100%;padding:12px;margin:10px 0;
+  border-radius:8px;border:1px solid #ccc
+}
+
+/* LOGIN */
+#login{
+  background:#111;color:#fff;
+  min-height:100vh;
+  padding:30px 20px;
+  text-align:center
+}
+
+/* LOGO */
+.logo{width:120px;margin:20px auto}
+
+/* LOADING */
+#loading{
+  background:#9b0000;color:#fff;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center
+}
+.top-title{
+  position:absolute;top:12px;
+  font-weight:bold;cursor:pointer
+}
+.progress{
+  width:70%;
+  background:rgba(255,255,255,.3);
+  border-radius:20px;
+  overflow:hidden
+}
+.bar{height:14px;width:0%;background:#fff}
+.note{margin-top:15px;text-align:center;font-size:14px}
+</style>
+</head>
+
+<body>
+
+<!-- LOGO SVG GIỐNG THUẾ NHÀ NƯỚC -->
+<template id="logoTpl">
+<svg class="logo" viewBox="0 0 200 200">
+  <!-- Nền đỏ -->
+  <circle cx="100" cy="100" r="95" fill="#c40000"/>
+
+  <!-- Vòng lúa trái -->
+  <path d="M55 60
+           C30 90,30 110,55 140"
+        fill="none" stroke="#ffd700" stroke-width="10"/>
+
+  <!-- Vòng lúa phải -->
+  <path d="M145 60
+           C170 90,170 110,145 140"
+        fill="none" stroke="#ffd700" stroke-width="10"/>
+
+  <!-- Sao -->
+  <polygon points="100,40 108,72 140,72 114,90
+                   124,122 100,104 76,122
+                   86,90 60,72 92,72"
+           fill="#ffd700"/>
+
+  <!-- Bánh răng -->
+  <path d="
+    M60 145
+    h80
+    a10 10 0 0 1 10 10
+    v10
+    h-100
+    v-10
+    a10 10 0 0 1 10 -10
+  " fill="#ffd700"/>
+
+  <!-- Chữ -->
+  <text x="100" y="130"
+        fill="#ffd700"
+        font-size="18"
+        font-weight="bold"
+        text-anchor="middle">
+    THUẾ NHÀ NƯỚC
+  </text>
+</svg>
+</template>
+
+<!-- LOGIN -->
+<div id="login">
+  <div id="logoLogin"></div>
+  <h2>eTax Mobile</h2>
+  <input id="name" placeholder="Họ và tên">
+  <input id="mst" placeholder="Mã số thuế">
+  <input type="password" placeholder="Mật khẩu">
+  <button onclick="login()">Đăng nhập</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="hidden">
+  <div class="header">eTax Mobile</div>
+
+  <div class="card">
+    <b>MST:</b> <span id="showMST"></span><br>
+    <b id="showName"></b>
+  </div>
+
+  <div class="card">
+    <h4>Chức năng hay dùng</h4>
+    <div class="grid">
+      <div class="icon" onclick="openForm()">Kê khai</div>
+      <div class="icon">Tra cứu QT</div>
+      <div class="icon">Nộp thuế</div>
+      <div class="icon">Liên kết</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div id="form" class="hidden">
+  <div class="header">Kê khai doanh nghiệp</div>
+  <div class="card">
+    <input placeholder="Mã số thuế">
+    <input placeholder="Số điện thoại">
+    <input placeholder="Người đại diện pháp luật">
+    <input placeholder="Địa chỉ công ty">
+    <input placeholder="Vốn điều lệ">
+    <input placeholder="Ngân hàng">
+    <input placeholder="Số tài khoản">
+    <button onclick="startLoading()">Cập nhật</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading" class="hidden">
+  <div class="top-title" onclick="backHome()">THUẾ CHÍNH PHỦ</div>
+  <div id="logoLoading"></div>
+  <h3>Hồ sơ đang được cập nhật</h3>
+  <div class="progress"><div id="bar" class="bar"></div></div>
+  <p id="percent">0%</p>
+  <div class="note">
+    Nhân viên đang thao tác<br>
+    không vui lòng chạm vào điện thoại
+  </div>
+</div>
+
+<script>
+const logoHTML = document.getElementById("logoTpl").innerHTML;
+logoLogin.innerHTML = logoHTML;
+logoLoading.innerHTML = logoHTML;
+
+function login(){
+  showName.innerText = name.value;
+  showMST.innerText = mst.value;
+  login.style.display="none";
+  home.style.display="block";
+}
+function openForm(){
+  home.style.display="none";
+  form.style.display="block";
+}
+function startLoading(){
+  form.style.display="none";
+  loading.style.display="flex";
+  let p=0;
+  let t=setInterval(()=>{
+    p++;
+    bar.style.width=p+"%";
+    percent.innerText=p+"%";
+    if(p>=100) clearInterval(t);
+  },6000); // 10 phút
+}
+function backHome(){
+  loading.style.display="none";
+  home.style.display="block";
+  bar.style.width="0%";
+  percent.innerText="0%";
+}
+</script>
+
+</body>
+</html>
